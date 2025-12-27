@@ -25,7 +25,19 @@ This project focuses on infrastructure foundations, not application runtime or o
 - GCP project with sufficient IAM permissions
 - Authentication via Application Default Credentials (ADC)
 
+
+## Bootstrap
+
+The Terraform remote state bucket is bootstrapped separately using a minimal Terraform configuration located in `bootstrap/gcs-tfstate`.
+
+This avoids circular dependencies where Terraform would otherwise attempt to use a backend that does not yet exist.
+
+The bootstrap configuration is executed once per project and uses a local Terraform state.
+
+
 ---
+
+
 
 ## Licence
 
