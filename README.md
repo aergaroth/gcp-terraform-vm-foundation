@@ -37,7 +37,19 @@ The bootstrap configuration is executed once per project and uses a local Terraf
 
 ---
 
+## Network layer
 
+The foundation network layer is implemented using a dedicated Terraform module.
+
+It provisions:
+- a custom VPC
+- a single regional subnet
+
+The network is intentionally minimal and serves as a baseline for further infrastructure components (firewall rules, compute resources).
+
+For cost control, the network can be safely created and destroyed using Terraform without impacting the project structure or remote state.
+
+---
 
 ## Licence
 
