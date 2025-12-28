@@ -24,7 +24,7 @@ This project focuses on infrastructure foundations, not application runtime or o
 - Authentication via Application Default Credentials (ADC)
 
 
->Environment-specific variables are loaded automatically from ```text *.auto.tfvars  ```
+>Environment-specific variables are loaded automatically from ```*.auto.tfvars  ```
 >intentionally excluded from version control. An example file is provided.
 
 
