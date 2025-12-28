@@ -51,7 +51,7 @@ For cost control, the network can be safely created and destroyed using Terrafor
 
 ---
 
->Environment-specific variables are defined in ```.tfvars``` files which are 
+>Environment-specific variables are loaded automatically fromn ```*.auto.tfvars``` files which are 
 >intentionally excluded from version control. An example file is provided.
 
 ## Licence
