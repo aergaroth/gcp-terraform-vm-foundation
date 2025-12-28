@@ -22,3 +22,7 @@ variable "subnet_cidr" {
   description = "CIDR range for the subnet"
   type        = string
 }
+
+variable "allowed_ssh_cidrs" {
+  type = list(string)
+}
