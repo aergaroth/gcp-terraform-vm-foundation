@@ -14,3 +14,10 @@ module "network" {
   subnet_cidr       = var.subnet_cidr
   allowed_ssh_cidrs = var.allowed_ssh_cidrs
 }
+
+module "iam" {
+  source = "./modules/iam"
+
+  project_id           = var.project_id
+  service_account_name = var.service_account_name
+}

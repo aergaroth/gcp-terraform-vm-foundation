@@ -26,3 +26,7 @@ variable "subnet_cidr" {
 variable "allowed_ssh_cidrs" {
   type = list(string)
 }
+
+variable "service_account_name" {
+  type = string
+}

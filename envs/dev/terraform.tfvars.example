@@ -8,3 +8,5 @@ subnet_cidr  = "10.10.0.0/24"
 allowed_ssh_cidrs = [
   "1.2.3.4/32"
 ]
+
+service_account_name = "dev-compute-sa"
