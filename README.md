@@ -51,6 +51,9 @@ For cost control, the network can be safely created and destroyed using Terrafor
 
 ---
 
+>Environment-specific variables are defined in ```.tfvars``` files which are 
+>intentionally excluded from version control. An example file is provided.
+
 ## Licence
 
 Licensed under the Apache License, Version 2.0.
