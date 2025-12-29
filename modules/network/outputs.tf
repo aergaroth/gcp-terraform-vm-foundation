@@ -6,10 +6,15 @@ output "network_self_link" {
   value = google_compute_network.this.self_link
 }
 
-output "subnet_name" {
-  value = google_compute_subnetwork.this.name
+# output "subnet_name" {
+#   value = google_compute_subnetwork.this.name
+# }
+
+output "subnet_id" {
+  value = google_compute_subnetwork.this.id
 }
 
 output "subnet_self_link" {
   value = google_compute_subnetwork.this.self_link
 }
+

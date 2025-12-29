@@ -3,6 +3,8 @@ resource "google_compute_instance" "this" {
   machine_type = var.machine_type
   zone         = var.zone
 
+  allow_stopping_for_update = true
+
   tags = ["ssh"]
 
   boot_disk {
@@ -22,13 +24,15 @@ resource "google_compute_instance" "this" {
     scopes = ["cloud-platform"]
   }
 
-#   metadata = {
-#     ssh-keys = "${var.ssh_username}:${var.ssh_public_key}"
-#   }
-
   metadata = {
     enable-oslogin = "TRUE"
   }
 
+  # Security hardening (
+  shielded_instance_config {
+    enable_secure_boot          = true
+    enable_vtpm                 = true
+    enable_integrity_monitoring = true
+  }
 
 }
