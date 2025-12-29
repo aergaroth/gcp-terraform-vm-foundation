@@ -31,6 +31,6 @@ module "compute" {
   zone                  = var.zone
   subnet                = module.network.subnet_id
   service_account_email = module.iam.service_account_email
-#  ssh_username          = var.ssh_username
-#  ssh_public_key        = var.ssh_public_key
+  #  ssh_username          = var.ssh_username
+  #  ssh_public_key        = var.ssh_public_key
 }
