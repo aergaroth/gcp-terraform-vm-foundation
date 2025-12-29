@@ -1,16 +1,20 @@
-# gcp-terraform-vm-foundation
+# GCP Terraform VM Foundation
 
-Foundation infrastructure for Google Cloud Platform built with Terraform.
+Lightweight Terraform project providing a production-style foundation for 
+running virtual machines on **Google Cloud Platform**.
 
-The goal of this project is to provide a clean, modular and reusable baseline for running virtual machines on GCP, including networking, IAM and remote state management.  
-It is designed as a long-lived infrastructure layer, suitable for further extension (e.g. additional environments or migration to GKE).
+The repository focuses on clear separation of concerns, explicit identity management, 
+and secure defaults, rather than feature completeness.
 
 ## Scope
 
 - Custom VPC and subnet
 - Firewall rules with explicit network boundaries
-- Compute Engine VM with dedicated service account
+- Dedicated service account for compute resources
+- Single compute Engine VM 
+- IAM-based SSH access (OS Login)
 - Remote Terraform state stored in GCS
+- Shielded VM security baseline
 - CI-ready Terraform workflow (fmt / validate / plan)
 
 This project focuses on infrastructure foundations, not application runtime or orchestration.
@@ -23,41 +27,89 @@ This project focuses on infrastructure foundations, not application runtime or o
 - GCP project with sufficient IAM permissions
 - Authentication via Application Default Credentials (ADC)
 
+## Architecture overview
 
->Environment-specific variables are loaded automatically from ```*.auto.tfvars  ```
->intentionally excluded from version control. An example file is provided.
+### Bootstrap
 
-
-## Bootstrap
-
-The Terraform remote state bucket is bootstrapped separately using a minimal Terraform configuration located in `bootstrap/gcs-tfstate`.
-
-This avoids circular dependencies where Terraform would otherwise attempt to use a backend that does not yet exist.
-
+The Terraform remote state bucket is bootstrapped separately using a minimal Terraform 
+configuration located in `bootstrap/gcs-tfstate`.
 The bootstrap configuration is executed once per project and uses a local Terraform state.
 
-## Network layer
+### Network
 
-The foundation network layer is implemented using a dedicated Terraform module.
+- Custom VPC with a single regional subnet
 
-It provisions:
-- a custom VPC
-- a single regional subnet
+- Firewall rules defined explicitly (no implicit allow rules)
 
-The network is intentionally minimal and serves as a baseline for further infrastructure components (firewall rules, compute resources).
+### IAM
 
-For cost control, the network can be safely created and destroyed using Terraform without impacting the project structure or remote state.
+- Dedicated service account for compute instances
+- Minimal roles only:
+  - ```roles/logging.logWriter```
+  - ```roles/monitoring.metricWriter```
+- Default service accounts are intentionally not used
 
-## IAM
+### Compute
 
-Compute resources use a dedicated service account managed by Terraform.
+- Ubuntu 22.04 LTS Compute Engine VM
+- Attached dedicated service account
+- SSH access via **GCP OS Login**
+- Shielded VM enabled (Secure Boot, vTPM, Integrity Monitoring)
 
-The service account is granted only minimal, predefined roles required for basic operation:
-- logging.logWriter
-- monitoring.metricWriter
 
-Default service accounts are intentionally not used to enforce explicit identity management and least-privilege access.
+## Repository Structure
+
+``` text 
+.
+├── modules
+│   ├── network   # VPC, subnet, firewall rules
+│   ├── iam       # Service account and IAM bindings
+│   └── compute   # Compute Engine instance
+├── envs
+│   └── dev       # Environment-specific variables (ignored)
+├── .github
+│   └── workflows # Terraform CI (fmt + validate)
+├── main.tf
+├── variables.tf
+├── outputs.tf
+└── README.md
+```
+## Environment Configuration
+
+Environment-specific variables are loaded automatically from ```*.auto.tfvars  ```
+intentionally excluded from version control. A symlink is placed in project root folder locally for convinience.
+An example file is provided:
+```envs/dev/terraform.auto.tfvars.example```
+
+## SSH Access Model
+
+SSH access is managed using GCP OS Login and IAM.
+
+- No SSH keys are stored in instance metadata
+- Access is granted based on IAM roles
+- Connection is performed using:
+```gcloud compute ssh <instance-name> --zone <zone>```
+This approach avoids key drift and aligns with GCP-native access control.
+
+## CI
+
+GitHub Actions performs basic Terraform hygiene checks:
+
+- ```terraform fmt -check```
+
+- ```terraform validate``` 
+The CI pipeline does not access GCP or apply infrastructure changes.
+
+## Status
+
+v1 – Complete
+
+The current version provides a clean and secure baseline for further work
+(e.g. configuration management, additional services, or Kubernetes).
 
 ## Licence
-
 Licensed under the Apache License, Version 2.0.
+## Author
+Sebastian Grochowski
+
+*Created as a portfolio project.*
