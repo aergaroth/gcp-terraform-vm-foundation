@@ -30,3 +30,16 @@ variable "allowed_ssh_cidrs" {
 variable "service_account_name" {
   type = string
 }
+
+variable "instance_name" {
+  type = string
+}
+
+variable "machine_type" {
+  type = string
+}
+
+variable "zone" {
+  type = string
+}
+
