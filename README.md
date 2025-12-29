@@ -112,4 +112,3 @@ Licensed under the Apache License, Version 2.0.
 ## Author
 Sebastian Grochowski
 
-*Created as a portfolio project.*
