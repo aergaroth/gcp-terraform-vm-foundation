@@ -1,5 +1,8 @@
 # GCP Terraform VM Foundation
 
+> v2 - multi-instance refactor
+
+
 Lightweight Terraform project providing a production-style foundation for 
 running virtual machines on **Google Cloud Platform**.
 
