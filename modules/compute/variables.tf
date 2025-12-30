@@ -1,14 +1,11 @@
-variable "instance_name" {
-  type = string
+
+variable "instances" {
+  type = map(object({
+    machine_type = string
+    zone         = string
+  }))
 }
 
-variable "machine_type" {
-  type = string
-}
-
-variable "zone" {
-  type = string
-}
 
 variable "subnet" {
   description = "Subnetwork self_link or name"
@@ -19,10 +16,3 @@ variable "service_account_email" {
   type = string
 }
 
-# variable "ssh_username" {
-#   type = string
-# }
-
-# variable "ssh_public_key" {
-#   type = string
-# }

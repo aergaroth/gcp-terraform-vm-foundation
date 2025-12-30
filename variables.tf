@@ -31,15 +31,11 @@ variable "service_account_name" {
   type = string
 }
 
-variable "instance_name" {
-  type = string
-}
 
-variable "machine_type" {
-  type = string
+variable "instances" {
+  description = "Map of compute instances"
+  type = map(object({
+    machine_type = string
+    zone         = string
+  }))
 }
-
-variable "zone" {
-  type = string
-}
-

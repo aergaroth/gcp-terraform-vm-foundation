@@ -11,7 +11,13 @@ allowed_ssh_cidrs = [
 
 service_account_name = "dev-compute-sa"
 
-instance_name = "dev-vm"
-machine_type  = "e2-micro"
-zone          = "europe-west1-b"
-
+instances = {
+  app-1 = {
+    machine_type = "e2-micro"
+    zone         = "europe-west1-b"
+  }
+  app-2 = {
+    machine_type = "e2-micro"
+    zone         = "europe-west1-b"
+  }
+}

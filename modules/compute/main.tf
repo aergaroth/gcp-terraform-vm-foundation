@@ -1,9 +1,21 @@
 resource "google_compute_instance" "this" {
-  name         = var.instance_name
-  machine_type = var.machine_type
-  zone         = var.zone
+  for_each = var.instances
+
+  name         = each.key
+  machine_type = each.value.machine_type
+  zone         = each.value.zone
 
   allow_stopping_for_update = true
+
+  service_account {
+    email  = var.service_account_email
+    scopes = ["cloud-platform"]
+  }
+
+  network_interface {
+    subnetwork = var.subnet
+    access_config {}
+  }
 
   tags = ["ssh"]
 
@@ -13,26 +25,13 @@ resource "google_compute_instance" "this" {
     }
   }
 
-  network_interface {
-    subnetwork = var.subnet
-
-    access_config {} # ephemeral public IP (dev only)
-  }
-
-  service_account {
-    email  = var.service_account_email
-    scopes = ["cloud-platform"]
-  }
-
   metadata = {
     enable-oslogin = "TRUE"
   }
-
-  # Security hardening (
+  # security hardening
   shielded_instance_config {
     enable_secure_boot          = true
     enable_vtpm                 = true
     enable_integrity_monitoring = true
   }
-
 }
