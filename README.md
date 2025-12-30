@@ -1,5 +1,8 @@
 # GCP Terraform VM Foundation
 
+> This branch represents the v1 single-instance foundation.
+> For the multi-instance refactor, see branch `v2-multi-instance`
+
 Lightweight Terraform project providing a production-style foundation for 
 running virtual machines on **Google Cloud Platform**.
 
