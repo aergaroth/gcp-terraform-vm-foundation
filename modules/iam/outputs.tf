@@ -1,3 +1,3 @@
-output "service_account_email" {
-  value = google_service_account.this.email
+output "instance_profile_name" {
+  value = aws_iam_instance_profile.this.name
 }

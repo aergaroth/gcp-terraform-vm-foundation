@@ -1,18 +1,22 @@
-resource "google_service_account" "this" {
-  account_id   = var.service_account_name
-  display_name = "Compute service account"
-  project      = var.project_id
+resource "aws_iam_role" "ec2_ssm" {
+  name = "ec2-ssm-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Principal = { Service = "ec2.amazonaws.com" }
+      Action = "sts:AssumeRole"
+    }]
+  })
 }
 
-# Minimal, safe default for VM access
-resource "google_project_iam_member" "logging" {
-  project = var.project_id
-  role    = "roles/logging.logWriter"
-  member  = "serviceAccount:${google_service_account.this.email}"
+resource "aws_iam_role_policy_attachment" "ssm" {
+  role       = aws_iam_role.ec2_ssm.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
-resource "google_project_iam_member" "monitoring" {
-  project = var.project_id
-  role    = "roles/monitoring.metricWriter"
-  member  = "serviceAccount:${google_service_account.this.email}"
+resource "aws_iam_instance_profile" "this" {
+  name = "ec2-ssm-profile"
+  role = aws_iam_role.ec2_ssm.name
 }
