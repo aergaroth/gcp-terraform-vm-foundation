@@ -1,41 +1,25 @@
-resource "google_compute_network" "this" {
-  name                    = var.network_name
-  auto_create_subnetworks = false
-  project                 = var.project_id
+resource "aws_vpc" "this" {
+  cidr_block           = "10.20.0.0/16"
+  enable_dns_support   = true
+  enable_dns_hostnames = true
 }
 
-resource "google_compute_subnetwork" "this" {
-  name          = var.subnet_name
-  ip_cidr_range = var.subnet_cidr
-  region        = var.region
-  network       = google_compute_network.this.id
-  project       = var.project_id
+resource "aws_subnet" "this" {
+  vpc_id                  = aws_vpc.this.id
+  cidr_block              = "10.20.1.0/24"
+  availability_zone       = var.az
+  map_public_ip_on_launch = true
 }
 
-resource "google_compute_firewall" "allow_ssh" {
-  name    = "${var.network_name}-allow-ssh"
-  network = google_compute_network.this.name
+resource "aws_security_group" "this" {
+  name   = "ec2-ssm-only"
+  vpc_id = aws_vpc.this.id
 
-  direction = "INGRESS"
-
-  allow {
-    protocol = "tcp"
-    ports    = ["22"]
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
-
-  source_ranges = var.allowed_ssh_cidrs
-  target_tags   = ["ssh"]
 }
 
-resource "google_compute_firewall" "allow_internal" {
-  name    = "${var.network_name}-allow-internal"
-  network = google_compute_network.this.name
-
-  direction = "INGRESS"
-
-  allow {
-    protocol = "all"
-  }
-
-  source_ranges = [var.network_cidr]
-}
