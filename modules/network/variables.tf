@@ -1,3 +1,4 @@
 variable "az" {
-  type = string
+  description = "AWS Availability Zone"
+  type        = string
 }

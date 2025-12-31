@@ -1,28 +1,21 @@
-variable "instance_name" {
+variable "instances" {
+  type = map(object({
+    instance_type = string
+  }))
+}
+
+variable "subnet_id" {
   type = string
 }
 
-variable "machine_type" {
+variable "security_group_id" {
   type = string
 }
 
-variable "zone" {
+variable "instance_profile_name" {
   type = string
 }
 
-variable "subnet" {
-  description = "Subnetwork self_link or name"
-  type        = string
-}
-
-variable "service_account_email" {
+variable "aws_az" {
   type = string
 }
-
-# variable "ssh_username" {
-#   type = string
-# }
-
-# variable "ssh_public_key" {
-#   type = string
-# }

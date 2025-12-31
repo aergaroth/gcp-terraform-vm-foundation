@@ -1,38 +1,26 @@
-resource "google_compute_instance" "this" {
-  name         = var.instance_name
-  machine_type = var.machine_type
-  zone         = var.zone
+data "aws_ami" "al2023" {
+  most_recent = true
 
-  allow_stopping_for_update = true
-
-  tags = ["ssh"]
-
-  boot_disk {
-    initialize_params {
-      image = "projects/ubuntu-os-cloud/global/images/family/ubuntu-2204-lts"
-    }
+  filter {
+    name   = "name"
+    values = ["al2023-ami-*-x86_64"]
   }
 
-  network_interface {
-    subnetwork = var.subnet
+  owners = ["amazon"]
+}
 
-    access_config {} # ephemeral public IP (dev only)
+resource "aws_instance" "this" {
+  for_each = var.instances
+
+  ami                    = data.aws_ami.al2023.id
+  instance_type          = each.value.instance_type
+  availability_zone      = var.aws_az
+  subnet_id              = var.subnet_id
+  vpc_security_group_ids = [var.security_group_id]
+
+  iam_instance_profile = var.instance_profile_name
+
+  tags = {
+    Name = each.key
   }
-
-  service_account {
-    email  = var.service_account_email
-    scopes = ["cloud-platform"]
-  }
-
-  metadata = {
-    enable-oslogin = "TRUE"
-  }
-
-  # Security hardening (
-  shielded_instance_config {
-    enable_secure_boot          = true
-    enable_vtpm                 = true
-    enable_integrity_monitoring = true
-  }
-
 }
