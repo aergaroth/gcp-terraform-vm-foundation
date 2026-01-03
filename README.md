@@ -21,13 +21,14 @@ It does **not** include application deployment or configuration management.
 ## Scope
 
 - Custom VPC and subnet
-- Security Group with no inbound SSH
+- Explicit internet gateway and routing
+- Security Group with no inbound access
 - Dedicated IAM role for EC2 instances
 - EC2 instances created using `for_each`
 - Access via AWS Systems Manager Session Manager (SSM)
-- No SSH keys or inbound ports
-- Terraform-managed IAM policies (least privilege)
-- CI-ready Terraform workflow (fmt / validate)
+- No SSH keys, no port 22
+- Custom least-privilege IAM policies
+- CI-ready Terraform workflow (`fmt` / `validate`)
 
 ---
 
@@ -37,7 +38,7 @@ It does **not** include application deployment or configuration management.
 - Terraform >= 1.6
 - AWS CLI v2
 - AWS account with sufficient IAM permissions
-- Authentication via AWS CLI profile
+- Authentication via AWS CLI profile (SSO supported)
 
 ---
 
@@ -47,8 +48,15 @@ It does **not** include application deployment or configuration management.
 
 - Custom VPC
 - Single public subnet
+- Explicit Internet Gateway
+- Explicit route table and subnet association
 - Outbound traffic allowed
 - No inbound access required
+
+All networking components are defined explicitly to avoid reliance
+on AWS implicit defaults.
+
+---
 
 ### Compute
 
@@ -70,119 +78,163 @@ instances = {
   }
 }
 ```
+
+---
+
 ## Access Model – AWS SSM (No SSH)
 
 This project does not use SSH.
 
 There are:
-
 - no key pairs,
-- no port 22,
+- no inbound ports,
 - no inbound security group rules.
 
-### Instance Access
+### Instance Identity (Machine Access)
 
 - EC2 instances assume a dedicated IAM role
-- Role includes:
+- The role uses a **custom least-privilege IAM policy**
+- Permissions are limited to what is strictly required for:
+  - SSM agent registration
+  - SSM Session Manager connectivity
 
-  - ```AmazonSSMManagedInstanceCore```
+The managed policy `AmazonSSMManagedInstanceCore` is **not used**.
+
+---
 
 ### Human Access (Least Privilege)
 
 Human access is provided via a Terraform-managed IAM policy that allows:
 
 - starting and terminating SSM sessions,
-- describing EC2 instances.
+- listing and describing instances.
 
-The policy does **not** allow:
-
-- modifying EC2 resources,
-- managing IAM,
-- executing arbitrary SSM commands.
+The policy explicitly **does not allow**:
+- SSH access,
+- EC2 instance modification,
+- IAM changes,
+- arbitrary SSM Run Command execution.
 
 Access is initiated using:
 
-```aws ssm start-session --target <instance-id>```
+```bash
+aws ssm start-session --target <instance-id>
+```
 
 This model:
 - eliminates SSH key management,
-- centralizes access in IAM,
-- aligns with zero-trust and production practices.
+- centralizes access control in IAM,
+- provides auditability via CloudTrail,
+- aligns with zero-trust and production security practices.
+
+---
 
 ## IAM Design
-### EC2 Instance Role
 
-- Trusted by ```ec2.amazonaws.com```
-- Attached policy:
-  - ```AmazonSSMManagedInstanceCore```
+### EC2 Instance Role (`iam-ec2`)
 
-### Human IAM Policy
+- Trusted by `ec2.amazonaws.com`
+- Uses a custom least-privilege policy for SSM
+- Attached via an instance profile
+- No additional AWS permissions granted
 
-Managed via Terraform:
+### Human IAM Policy (`iam-ssm-user`)
 
-- attached to an IAM user or role,
-- grants SSM session access only,
-- follows least-privilege principles.
+- Managed via Terraform
+- Grants SSM session access only
+- Intended to be attached to:
+  - IAM users, or
+  - IAM roles assumed via SSO
+- No infrastructure mutation permissions
 
-### Repository Structure
-```.
-├── modules
-│   ├── network        # VPC, subnet, security group
-│   ├── compute        # EC2 instances (for_each)
-│   ├── iam-ec2        # IAM role + instance profile
-│   └── iam-ssm-user   # SSM-only IAM policy for humans
+---
+
+## Repository Structure
+
+```text
+.
+├── backend.aws.tf
+├── bootstrap
+│   └── aws-tfstate
+│       ├── main.tf
+│       ├── variables.tf
+│       ├── versions.tf
+│       └── README.md
 ├── envs
-│   └── dev            # Environment-specific variables (ignored)
-├── .github
-│   └── workflows      # Terraform CI (fmt + validate)
+│   └── dev
+│       ├── terraform.auto.tfvars
+│       └── terraform.auto.tfvars.example
+├── modules
+│   ├── compute
+│   ├── network
+│   ├── iam-ec2
+│   └── iam-ssm-user
 ├── main.tf
+├── provider.tf
 ├── variables.tf
 ├── outputs.tf
-└── README.md
+├── versions.tf
+├── README.md
+└── LICENSE
 ```
-### Environment Configuration
 
-Environment-specific values are provided via
-```terraform.auto.tfvars```, which is intentionally excluded from version control.
+>> Bootstrap directories contain one-time infrastructure and are intentionally excluded from CI and state management.
+
+---
+
+## Environment Configuration
+
+Environment-specific values are provided via `terraform.auto.tfvars`,
+which is intentionally excluded from version control.
 
 An example file is provided:
 
-```envs/dev/terraform.auto.tfvars.example```
-
+```text
+envs/dev/terraform.auto.tfvars.example
+```
 
 Typical values include:
-
 - AWS region
-- AWS profile
+- AWS CLI profile
 - EC2 instance definitions
+
+---
 
 ## CI
 
 GitHub Actions performs basic Terraform hygiene checks:
 
-- terraform fmt -check
-- terraform validate
+- `terraform fmt -check`
+- `terraform validate`
 
-The CI pipeline does not access AWS
-and does not apply infrastructure changes.
+The CI pipeline does **not** access AWS
+and does **not** apply infrastructure changes.
+
+---
 
 ## Design Decisions
 
-```for_each``` is used instead of ```count``` to ensure stable resource identity
-
+- `for_each` is used instead of `count` to ensure stable resource identity
 - SSH access is completely removed
 - IAM is treated as part of infrastructure, not a manual step
+- All network components are explicitly defined
 - Terraform state is considered disposable for foundation-level infrastructure
 - The project is designed to be extended into a multi-cloud layout
 
+---
+
 ## Status
 
-- AWS foundation: completed
-- Next steps: multi-cloud unification (AWS + GCP + Azure)
+- AWS foundation: **completed**
+- Next step: merge into `multicloud-foundation`
+
+---
 
 ## License
 
 Licensed under the Apache License, Version 2.0.
+
+---
 
 ## Author
 

@@ -3,8 +3,8 @@ module "network" {
   az     = var.aws_az
 }
 
-module "iam" {
-  source = "./modules/iam"
+module "iam_ec2" {
+  source = "./modules/iam-ec2"
 }
 
 module "compute" {
@@ -15,7 +15,7 @@ module "compute" {
 
   subnet_id             = module.network.subnet_id
   security_group_id     = module.network.security_group_id
-  instance_profile_name = module.iam.instance_profile_name
+  instance_profile_name = module.iam_ec2.instance_profile_name
 }
 
 module "iam_ssm_user" {

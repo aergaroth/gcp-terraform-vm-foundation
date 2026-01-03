@@ -1,11 +1,11 @@
 # Terraform State Bucket Bootstrap
 
-This configuration bootstraps a Google Cloud Storage bucket used for Terraform remote state.
+This module bootstraps the S3 bucket and DynamoDB table used for Terraform remote state.
 
 The bucket is created separately to avoid circular dependencies where Terraform would attempt to use a backend that does not yet exist.
 
 ## Scope
-- GCS bucket for Terraform state
+- AWS bucket for Terraform state
 - Object versioning enabled
 
 ## Notes
