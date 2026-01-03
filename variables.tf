@@ -19,3 +19,15 @@ variable "instances" {
     instance_type = string
   }))
 }
+
+variable "aws_user_name" {
+  type        = string
+  description = "IAM user name for SSM access"
+  default     = null
+}
+
+variable "aws_human_role_arn" {
+  type        = string
+  description = "IAM role ARN for SSM access"
+  default     = null
+}

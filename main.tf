@@ -17,3 +17,11 @@ module "compute" {
   security_group_id     = module.network.security_group_id
   instance_profile_name = module.iam.instance_profile_name
 }
+
+module "iam_ssm_user" {
+  source = "./modules/iam-ssm-user"
+
+  name                = "human-access"
+  attach_to_user_name = var.aws_user_name
+}
+
