@@ -1,0 +1,35 @@
+name: Terraform AWS CI
+
+on:
+  pull_request:
+    paths:
+      - "aws/**"
+  push:
+    branches: [ main ]
+    paths:
+      - "aws/**"
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.6
+
+      - name: Terraform fmt
+        working-directory: aws
+        run: terraform fmt -check -recursive
+
+      - name: Terraform init
+        working-directory: aws
+        run: terraform init -backend=false
+
+      - name: Terraform validate
+        working-directory: aws
+        run: terraform validate

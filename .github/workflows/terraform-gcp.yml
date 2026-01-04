@@ -1,0 +1,35 @@
+name: Terraform GCP CI
+
+on:
+  pull_request:
+    paths:
+      - "gcp/**"
+  push:
+    branches: [ main ]
+    paths:
+      - "gcp/**"
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.6
+
+      - name: Terraform fmt
+        working-directory: gcp
+        run: terraform fmt -check -recursive
+
+      - name: Terraform init
+        working-directory: gcp
+        run: terraform init -backend=false
+
+      - name: Terraform validate
+        working-directory: gcp
+        run: terraform validate

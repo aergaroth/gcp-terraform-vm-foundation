@@ -1,0 +1,35 @@
+name: Terraform Azure CI
+
+on:
+  pull_request:
+    paths:
+      - "azure/**"
+  push:
+    branches: [ main ]
+    paths:
+      - "azure/**"
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.6
+
+      - name: Terraform fmt
+        working-directory: azure
+        run: terraform fmt -check -recursive
+
+      - name: Terraform init
+        working-directory: azure
+        run: terraform init -backend=false
+
+      - name: Terraform validate
+        working-directory: azure
+        run: terraform validate
