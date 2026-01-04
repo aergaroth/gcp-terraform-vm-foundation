@@ -1,0 +1,23 @@
+project_id   = "example-project-id"
+region       = "europe-west1"
+
+network_name = "dev-vpc"
+subnet_name  = "dev-subnet"
+subnet_cidr  = "10.10.0.0/24"
+
+allowed_ssh_cidrs = [
+  "1.2.3.4/32"
+]
+
+service_account_name = "dev-compute-sa"
+
+instances = {
+  app-1 = {
+    machine_type = "e2-micro"
+    zone         = "europe-west1-b"
+  }
+  app-2 = {
+    machine_type = "e2-micro"
+    zone         = "europe-west1-b"
+  }
+}
