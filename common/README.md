@@ -1,11 +1,56 @@
-# Common Design Principles
+# Common – Multi-Cloud Foundation Standards
 
-This directory describes concepts shared across all cloud providers.
+This folder defines **shared architectural standards** for the entire
+multi-cloud foundation (AWS, GCP, Azure).
 
-- Logical "instances" instead of provider-specific resources
-- No SSH access
-- IAM-first access model
-- Separate state per cloud
-- No shared Terraform state across providers
+It does **not** contain Terraform providers or cloud resources.
 
-This folder intentionally contains no Terraform code.
+Its purpose is to act as a **contract**, not implementation.
+
+---
+
+## What belongs here
+
+- Naming conventions
+- Tagging / labeling standards
+- Access and identity model
+- Security assumptions
+- Design rules shared across all clouds
+
+---
+
+## What explicitly does NOT belong here
+
+- Terraform providers (`aws`, `google`, `azurerm`)
+- Cloud resources (VPC, VM, EC2, Subnet, etc.)
+- Terraform backends (S3, GCS, Azure Storage)
+- Environment-specific configuration
+
+All cloud-specific implementation lives under:
+
+- `aws/`
+- `gcp/`
+- `azure/`
+
+---
+
+## Philosophy
+
+This repository treats infrastructure foundations as:
+
+- disposable
+- reproducible
+- secure by default
+- provider-native
+
+Each cloud uses its **native identity and access model** instead of
+cross-cloud abstractions.
+
+---
+
+## Consumption model
+
+Each cloud folder **implements** the rules defined here.
+
+Violations of these standards should be treated as architectural bugs,
+not stylistic differences.
