@@ -9,3 +9,8 @@ module "network" {
   subnet_cidr = "10.30.1.0/24"
 }
 
+module "iam_vm_login" {
+  source       = "./modules/iam-vm-login"
+  scope_id     = azurerm_resource_group.this.id
+  principal_id = var.admin_object_id
+}
