@@ -1,3 +1,6 @@
+# Example backend configuration (for reference only).
+# Actual values must be provided during `terraform init`.
+
 #terraform {
 #  backend "s3" {
 #    bucket         = "tfstate-aws-vm-foundation-dev"
@@ -9,7 +12,7 @@
 #  }
 #}
 
-# backend.aws.tf
+
 terraform {
   backend "s3" {}
 }
