@@ -3,9 +3,9 @@ variable "scope_id" {
   type        = string
 }
 
-variable "principal_id" {
-  description = "Entra ID object ID (user or group)"
-  type        = string
+variable "principal_ids" {
+  description = "Azure AD object IDs allowed to login to VMs"
+  type        = list(string)
 }
 
 variable "role_name" {
