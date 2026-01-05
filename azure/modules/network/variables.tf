@@ -22,3 +22,5 @@ variable "subnet_cidr" {
   description = "Subnet CIDR block"
   type        = string
 }
+
+

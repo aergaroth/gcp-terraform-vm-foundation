@@ -33,9 +33,9 @@ terraform init \
   -backend-config="resource_group_name=rg-tfstate-azure" \
   -backend-config="storage_account_name=tfstateazrsebdev01" \
   -backend-config="container_name=tfstate" \
-  -backend-config="key=env/dev/terraform.tfstate"```
+  -backend-config="key=env/dev/terraform.tfstate"
+```
 Terraform does not allow variables in backend configuration by design.
-
 
 ---
 

@@ -10,12 +10,11 @@ resource "azurerm_storage_account" "tfstate" {
   account_tier             = "Standard"
   account_replication_type = "LRS"
 
-  allow_blob_public_access = false
-  min_tls_version          = "TLS1_2"
+#  allow_blob_public_access = false
 }
 
 resource "azurerm_storage_container" "tfstate" {
-  name                  = var.container_name
+  name                  = "tfstate"
   storage_account_name  = azurerm_storage_account.tfstate.name
   container_access_type = "private"
 }
