@@ -24,6 +24,19 @@ Azure-native identity and security models.
 - Remote Terraform state (Azure Storage)
 - CI-ready structure
 
+### Backend initialization
+
+Backend configuration is provided explicitly during initialization:
+
+```bash
+terraform init \
+  -backend-config="resource_group_name=rg-tfstate-azure" \
+  -backend-config="storage_account_name=tfstateazrsebdev01" \
+  -backend-config="container_name=tfstate" \
+  -backend-config="key=env/dev/terraform.tfstate"```
+Terraform does not allow ariables in backend configuration by design.
+
+
 ---
 
 ## Access Model (No SSH)
