@@ -51,6 +51,10 @@ cross-cloud abstractions.
 ## Consumption model
 
 Each cloud folder **implements** the rules defined here.
+Common defines *constraints*, not reusable Terraform code.
 
 Violations of these standards should be treated as architectural bugs,
 not stylistic differences.
+
+>Terraform backends are configured explicitly during terraform init.
+>Backend configuration does not use Terraform variables by design.
