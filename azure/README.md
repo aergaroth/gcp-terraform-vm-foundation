@@ -1,6 +1,6 @@
 # Azure Terraform VM Foundation
 
-> **Branch:** multicloud-foundation
+> **Branch:** azure-foundation
 > **Status:** Foundation (Azure)
 > **Access model:** Entra ID (Azure AD) – no SSH
 
@@ -34,7 +34,7 @@ terraform init \
   -backend-config="storage_account_name=tfstateazrsebdev01" \
   -backend-config="container_name=tfstate" \
   -backend-config="key=env/dev/terraform.tfstate"```
-Terraform does not allow ariables in backend configuration by design.
+Terraform does not allow variables in backend configuration by design.
 
 
 ---
@@ -53,7 +53,7 @@ Access is provided via **Azure Entra ID**:
 
 ```bash
 az ssh vm --resource-group <rg> --name <vm-name>
-
+```
 ---
 
 ## Compute Design
@@ -73,7 +73,7 @@ instances = {
 }
 ```
 Instances are created using ```for_each```
-to guarantee stable resource identity.
+to guarantee stable resource identity and predictable lifecycle management.
 
 ## IAM (Identity)
 
@@ -93,8 +93,8 @@ to guarantee stable resource identity.
 
 - Custom VNet
 - Single subnet (foundation scope)
-- No inbound SSH rules
-- Outbound internet allowed
+- No inbound access (including SSH)
+- Explicit outbound internet access
 
 ## Environment Configuration
 
@@ -114,10 +114,11 @@ GitHub Actions performs:
 - terraform fmt -check
 - terraform validate
 
-CI does not authenticate to Azure.
+CI does not authenticate to Azure and does not apply infrastructure changes.
 
-## Licence 
-Apache Licence 2.0
+## License 
+Apache License 2.0
+
 ## Author 
 Sebastian Grochowski
 
