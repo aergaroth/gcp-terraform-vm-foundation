@@ -1,10 +1,11 @@
-## Project Structure
+## Branch context
 
-This repository represents the final multicloud foundation.
+This branch focuses on building and stabilizing the Azure foundation
+within a multicloud Terraform repository.
 
-Previous iterations are preserved in historical branches:
-- v1-gcp-single-vm
-- v2-gcp-multi-instance
-- aws-foundation
+Only the following paths are actively modified on this branch:
+- `azure/`
+- `bootstrap/azr-tfstate`
 
->Each cloud has an isolated CI workflow validating Terraform syntax and structure.
+Other cloud directories (`aws/`, `gcp/`) are part of the shared baseline
+and are not modified here.
