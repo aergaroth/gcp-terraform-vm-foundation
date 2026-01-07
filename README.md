@@ -1,5 +1,7 @@
 # Terraform Multi-Cloud Foundation
 
+>Current stable snapshot: v1.0.1 (multicloud foundation complete).
+
 This repository contains a **Terraform-based multi-cloud infrastructure foundation**
 covering **AWS, Google Cloud Platform and Microsoft Azure**.
 
@@ -8,6 +10,7 @@ and clean Infrastructure as Code**, rather than application-level workloads.
 
 It is intended as a **foundation layer** that can be extended with
 application stacks, monitoring, security tooling or CI/CD pipelines.
+
 
 ---
 
@@ -116,6 +119,9 @@ and does not authenticate to cloud providers.
 - AWS foundation: complete
 - GCP foundation: complete
 - Azure foundation: complete
+
+This project is intentionally frozen as a portfolio-grade infrastructure foundation.
+Future work may build on top of it, but the foundation itself is considered complete.
 
 ---
 
