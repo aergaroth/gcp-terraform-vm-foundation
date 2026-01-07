@@ -23,6 +23,12 @@ resource "azurerm_bastion_host" "this" {
     public_ip_address_id = azurerm_public_ip.this.id
   }
 
+  lifecycle {
+    ignore_changes = [
+      kerberos_enabled
+    ]
+  }
+
   tags = var.tags
 }
 
