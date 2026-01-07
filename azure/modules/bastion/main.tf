@@ -11,6 +11,11 @@ resource "azurerm_bastion_host" "this" {
   name                = var.name
   location            = var.location
   resource_group_name = var.resource_group_name
+  sku                 = "Standard"
+
+  tunneling_enabled  = true
+  ip_connect_enabled = true
+  kerberos_enabled   = false
 
   ip_configuration {
     name                 = "configuration"
@@ -18,6 +23,7 @@ resource "azurerm_bastion_host" "this" {
     public_ip_address_id = azurerm_public_ip.this.id
   }
 
-  sku  = "Standard"
   tags = var.tags
 }
+
+
