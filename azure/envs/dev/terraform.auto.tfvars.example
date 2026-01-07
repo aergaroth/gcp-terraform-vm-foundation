@@ -1,0 +1,58 @@
+# This is an example file.
+# Copy to terraform.auto.tfvars and adjust values for your environment.
+
+# --------------------------------------------------
+# Project / environment
+# --------------------------------------------------
+
+project     = "demo"
+environment = "dev"
+location    = "northeurope"
+name        = "vm-foundation-dev"
+
+# --------------------------------------------------
+# Networking
+# --------------------------------------------------
+
+vnet_cidr   = "10.10.0.0/16"
+subnet_cidr = "10.10.1.0/24"
+
+# --------------------------------------------------
+# Compute
+# --------------------------------------------------
+
+vm_size = "Standard_D2s_v3"
+
+# Optional availability zone
+# Set to null to disable zonal deployment
+zone = null
+
+admin_username = "azureuser"
+
+# SSH key required by Azure for initial provisioning only.
+# User access is handled via Azure Entra ID (AAD), not SSH keys.
+admin_ssh_public_key = "ssh-ed25519 AAAA...example"
+
+# --------------------------------------------------
+# Identity & access
+# --------------------------------------------------
+
+# Azure AD (Entra ID) object IDs allowed to log in to the VM
+vm_login_principal_ids = [
+  "00000000-0000-0000-0000-000000000000"
+]
+
+# Azure AD object IDs with VM admin-level access (optional)
+admin_object_ids = [
+  "00000000-0000-0000-0000-000000000000"
+]
+
+# --------------------------------------------------
+# Tags
+# --------------------------------------------------
+
+tags = {
+  project = "demo"
+  env     = "dev"
+  owner   = "seb"
+}
