@@ -22,13 +22,13 @@ resource "azurerm_linux_virtual_machine" "this" {
   resource_group_name = var.resource_group_name
   size                = var.vm_size
 
+  admin_username = var.admin_username
+
   admin_ssh_key {
     username   = var.admin_username
     public_key = var.bootstrap_ssh_public_key
   }
 
-
-  admin_username = var.admin_username
   network_interface_ids = [
     azurerm_network_interface.this.id
   ]
@@ -47,4 +47,9 @@ resource "azurerm_linux_virtual_machine" "this" {
     sku       = "22_04-lts"
     version   = "latest"
   }
+
+  identity {
+    type = "SystemAssigned"
+  }
 }
+
