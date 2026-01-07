@@ -8,8 +8,9 @@ variable "admin_object_ids" {
   type        = list(string)
 }
 
-variable "environment" {
-  type = string
+variable "env" {
+  description = "Environment name (e.g. dev, stage, prod)"
+  type        = string
 }
 
 variable "subscription_id" {
@@ -18,9 +19,9 @@ variable "subscription_id" {
 }
 
 variable "project" {
-  type = string
+  description = "Project name"
+  type        = string
 }
-
 
 variable "name" {
   description = "Base name for Azure resources"
@@ -41,4 +42,26 @@ variable "instances" {
     size = string
     zone = string
   }))
+}
+
+variable "tags" {
+  description = "Common resource tags"
+  type        = map(string)
+  default     = {}
+}
+
+variable "vm_login_principal_ids" {
+  description = "Azure AD object IDs allowed to login to VM"
+  type        = list(string)
+}
+
+variable "bootstrap_ssh_public_key" {
+  description = "Dummy SSH key required by Azure provider"
+  type        = string
+}
+
+
+variable "bastion_subnet_cidr" {
+  description = "CIDR for Azure Bastion subnet"
+  type        = string
 }

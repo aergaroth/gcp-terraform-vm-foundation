@@ -9,3 +9,8 @@ output "subnet_id" {
 output "nsg_id" {
   value = azurerm_network_security_group.this.id
 }
+
+output "bastion_subnet_id" {
+  description = "Subnet ID for Azure Bastion"
+  value       = azurerm_subnet.bastion.id
+}

@@ -24,3 +24,7 @@ variable "subnet_cidr" {
 }
 
 
+variable "bastion_subnet_cidr" {
+  description = "CIDR for Azure Bastion subnet"
+  type        = string
+}
