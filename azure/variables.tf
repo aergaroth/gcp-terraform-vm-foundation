@@ -55,7 +55,7 @@ variable "vm_login_principal_ids" {
   type        = list(string)
 }
 
-variable "bootstrap_ssh_public_key" {
+variable "admin_ssh_public_key" {
   description = "Dummy SSH key required by Azure provider"
   type        = string
 }

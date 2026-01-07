@@ -29,7 +29,7 @@ module "compute" {
   subnet_id = module.network.subnet_id
   nsg_id    = module.network.nsg_id
 
-  bootstrap_ssh_public_key = var.bootstrap_ssh_public_key
+  admin_ssh_public_key = var.admin_ssh_public_key
   tags                     = var.tags
 }
 

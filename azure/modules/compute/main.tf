@@ -21,12 +21,12 @@ resource "azurerm_linux_virtual_machine" "this" {
   location            = var.location
   resource_group_name = var.resource_group_name
   size                = var.vm_size
-
+  zone                = var.zone
   admin_username = var.admin_username
 
   admin_ssh_key {
     username   = var.admin_username
-    public_key = var.bootstrap_ssh_public_key
+    public_key = var.admin_ssh_public_key
   }
 
   network_interface_ids = [
@@ -60,6 +60,6 @@ resource "azurerm_virtual_machine_extension" "aad_ssh_login" {
   publisher = "Microsoft.Azure.ActiveDirectory"
   type      = "AADSSHLoginForLinux"
 
-  type_handler_version         = "1.0"
-  auto_upgrade_minor_version   = true
+  type_handler_version       = "1.0"
+  auto_upgrade_minor_version = true
 }

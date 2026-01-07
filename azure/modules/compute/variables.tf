@@ -40,7 +40,13 @@ variable "tags" {
   default = {}
 }
 
-variable "bootstrap_ssh_public_key" {
-  description = "Bootstrap SSH key required by Azure (not used for access)"
+variable "admin_ssh_public_key" {
+  description = "Public SSH key required by Azure for initial VM provisioning"
   type        = string
+}
+
+variable "zone" {
+  description = "Availability zone (optional)"
+  type        = string
+  default     = null
 }
