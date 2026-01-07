@@ -55,6 +55,25 @@ Terraform does not allow variables in backend configuration by design.
 
 ---
 
+## Directory Structure
+```
+azure/
+├── envs/
+│ └── dev/
+│ ├── terraform.auto.tfvars
+│ └── terraform.auto.tfvars.example
+├── modules/
+│ ├── compute/
+│ ├── network/
+│ ├── iam-vm-login/
+│ └── bastion/
+├── backend.azr.tf
+├── main.tf
+├── variables.tf
+├── outputs.tf
+└── README.md
+```
+
 ## Access Model (No SSH)
 
 This project **does not rely on traditional SSH access**.
@@ -173,6 +192,23 @@ GitHub Actions performs:
 
 CI does not authenticate to Azure
 and does not apply infrastructure changes.
+
+---
+
+## Non-goals
+
+This foundation intentionally does not cover:
+- high availability or autoscaling
+- application-level configuration
+- monitoring or logging stacks
+- production hardening beyond identity and access
+
+---
+## Why Azure is different
+
+Unlike AWS and GCP, Azure requires explicit Bastion configuration
+and Managed Identity to support identity-based SSH access.
+This foundation reflects those platform-specific constraints.
 
 ---
 
